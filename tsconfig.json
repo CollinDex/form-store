@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "lib": ["es5", "es6"],
+    "target": "ES2022",
+    "module": "commonjs",
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "./build",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types", "src/types"],
+    "types": ["jest"],
+    "resolveJsonModule": true
+  },
+  "types": ["node", "jest"],
+  "include": ["src/**/*", "config"],
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+}
