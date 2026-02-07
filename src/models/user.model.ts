@@ -1,14 +1,12 @@
 import { IsEmail } from 'class-validator';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Column, Entity, Unique } from 'typeorm';
 import { getIsInvalidMessage } from '../utils';
 import { UserRole } from '../types';
+import { ExtendedBaseEntity } from './extended-base-entity';
 
 @Entity()
 @Unique(['email'])
-export class User extends BaseEntity {
-	@PrimaryGeneratedColumn('uuid')
-	id: string;
-
+export class User extends ExtendedBaseEntity {
 	@Column()
 	username: string;
 

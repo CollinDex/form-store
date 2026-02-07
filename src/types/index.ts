@@ -10,7 +10,12 @@ export enum NotificationsStatus {
 	READ = 'read'
 }
 
-export interface IUser {
+export interface Base {
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export interface IUser extends Base {
 	id: string;
 	username: string;
 	password: string;
