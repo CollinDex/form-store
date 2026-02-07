@@ -7,22 +7,16 @@ const swaggerDefinition: SwaggerDefinition = {
 	info: {
 		title: 'Express Template',
 		version: version,
-		description: 'OpenApi documentaiton for the Express Template'
+		description: 'OpenApi documentaiton for the Form ApI'
 	},
 	servers: [
 		{
-			url: `http://localhost:${config.port}/`,
+			url: `http://localhost:${config.port}/api/v1`,
 			description: 'Local server'
 		},
 		{
 			url: 'https://express-template-production.up.railway.app/',
 			description: 'Live server'
-		}
-	],
-	tags: [
-		{
-			name: 'Authentication',
-			description: 'A list of routes for Authentication'
 		}
 	],
 	components: {
@@ -43,7 +37,7 @@ const swaggerDefinition: SwaggerDefinition = {
 
 const options = {
 	swaggerDefinition,
-	apis: ['./src/routes/*.ts', './src/controllers/*.ts', './src/services/*.ts', './src/schema/*.ts', './src/docs/*.ts']
+	apis: ['./src/docs/swagger.ts']
 };
 
 const specs = swaggerJsdoc(options);

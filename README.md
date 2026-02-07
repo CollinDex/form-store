@@ -1,212 +1,77 @@
-# Express_Template
+# VantikLabs Backend Assessment - Dynamic Form API
 
-## Overview
-The **Express_Template** is a basic setup of boilerplate code needed to build a scalable backend in express using the MERN stack.
+## 🚀 Overview
 
-## Features
+A robust Node.js backend for creating versioned dynamic forms and handling submissions. This API supports complex schema validation, version control, and asynchronous processing for high performance.
 
-### Feature 1:
-- **Sub Feature 1:** Lorem Ipsum.
-- **Sub Feature 2:** Lorem Ipsum.
+## 🛠️ Tech Stack
 
-### Feature 2:
-- **Sub Feature 1:** Lorem Ipsum.
-- **Sub Feature 1:** Lorem Ipsum.
-- **Sub Feature 1:** Lorem Ipsum.
+- **Language:** TypeScript (Node.js/Express)
+- **Database:** PostgreSQL (TypeORM)
+- **Queue:** Redis + Bull (for email notifications)
+- **Validation:** Zod (Static) + Custom Middleware (Dynamic DB Checks)
+- **Docs:** Swagger UI
 
+## ⚙️ Setup & Installation
 
-### General Features:
-- **User Authentication:** Secure user registration and login system.
-- **Profile Management:** Create and update user profiles with personal data.
- 
-## Tech Stack
+### Prerequisites
 
-- **Backend:**
-  - Node.js with Express.js
-  - MongoDB with Mongoose (NoSQL database)
-  - JWT for authentication
+- Node.js (v18+)
+- Docker & Docker Compose
 
-## Getting Started
+### Quick Start
 
-Before you begin, ensure you have the following installed on your machine:
+1.  **Clone the repository**
 
-- [Node.js](https://nodejs.org/) (v14 or later)
-- [npm](https://www.npmjs.com/) (Node Package Manager, included with Node.js)
-- [Git](https://git-scm.com/)
+    ```bash
+    git clone <your-repo-link>
+    cd form-store
+    ```
 
-# Contribution Guide
+2.  **Setup Environment**
+    Copy the example env file:
 
-## Fork this repository
+    ```bash
+    cp .env.example .env
+    ```
 
-Fork this repository by clicking on the fork button on the top of this page.
-This will create a copy of this repository in your account.
+    _Update `.env` with your DB credentials if strictly necessary, or leave defaults for Docker._
 
-## Clone the repository
+3.  **Start Infrastructure (Postgres + Redis)**
 
-<img align="right" width="300" src="https://firstcontributions.github.io/assets/Readme/clone.png" alt="clone this repository" />
+    ```bash
+    docker-compose up -d
+    ```
 
-Now clone the forked repository to your machine. Go to your GitHub account, open the forked repository, click on the code button and then click the _copy to clipboard_ icon.
+4.  **Install Dependencies & Run**
 
-Open a terminal and run the following git command:
+    ```bash
+    yarn install
+    yarn run start:dev
+    ```
 
-```bash
-git clone "url you just copied"
-```
+5.  **Access the API**
+    - **Swagger Docs:** `http://localhost:3000/api/docs`
+    - **Health Check:** `http://localhost:3000/api/v1`
 
-where "url you just copied" (without the quotation marks) is the url to this repository (your fork of this project). See the previous steps to obtain the url.
+## ⚖️ Architecture Decisions & Trade-offs
 
-<img align="right" width="300" src="https://firstcontributions.github.io/assets/Readme/copy-to-clipboard.png" alt="copy URL to clipboard" />
+### 1. Hybrid Storage (SQL + JSONB)
 
-For example:
+- **Decision:** I used PostgreSQL `jsonb` for the form schema and submission answers.
+- **Why:** While relational tables ensure data integrity for core entities (`Form`, `FormVersion`), a rigid SQL schema cannot efficiently handle user-defined fields. `jsonb` offers NoSQL flexibility with ACID compliance.
 
-```bash
-git clone git@github.com:this-is-you/job-board-api.git
-```
+### 2. Validation
 
-where `this-is-you` is your GitHub username. Here you're copying the contents of the first-contributions repository on GitHub to your computer.
+- **Layer 1 (Static):** Zod middleware validates the request structure (e.g., ensuring IDs are UUIDs).
+- **Layer 2 (Dynamic):** A custom middleware fetches the active `FormSchema` from the DB and validates user input against it before the controller processes the request.
 
-## Create a branch
+### 3. Asynchronous Architecture
 
-Change to the repository directory on your computer (if you are not already there):
+- **Decision:** Integrated **Redis + Bull** for email notifications.
+- **Why:** Submitting a form is a critical user action. By offloading side effects (emails) to a background queue, the API responds instantly, and retries are handled automatically if the email provider fails.
 
-```bash
-cd job-board-api
-```
+### 4. Security
 
-Now create a branch using the `git switch` command:
-
-```bash
-git switch -c your-new-branch-name
-```
-
-For example:
-
-```bash
-git switch -c add-alonzo-church
-```
-
-### Important notice:
-
-```bash
-  console.log
-```
-
-is not allowed
-
-a default logger has been created
-
-```bash
-  import log from "./utils/logger";
-
-  log.info("information")
-```
-
-### Make Changes
-
-Make your changes to the codebase. Ensure your code follows the project's coding standards and guidelines.
-
-## commit those changes
-
-<img align="right" width="450" src="https://firstcontributions.github.io/assets/Readme/git-status.png" alt="git status" />
-
-If you go to the project directory and execute the command `git status`, you'll see there are changes.
-
-Add those changes to the branch you just created using the `git add` command:
-
-## Push changes to GitHub
-
-Push your changes using the command `git push`:
-
-```bash
-git push -u origin your-branch-name
-```
-
-replacing `your-branch-name` with the name of the branch you created earlier.
-
-<details>
-<summary> <strong>If you get any errors while pushing, click here:</strong> </summary>
-
-- ### Authentication Error
-     <pre>remote: Support for password authentication was removed on August 13, 2021. Please use a personal access token instead.
-  remote: Please see https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information.
-  fatal: Authentication failed for 'https://github.com/<your-username>/first-contributions.git/'</pre>
-  Go to [GitHub's tutorial](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) on generating and configuring an SSH key to your account.
-
-</details>
-
-## Submit your changes for review into Staging
-
-If you go to your repository on GitHub, you'll see a `Compare & pull request` button. Click on that button.
-
-<img style="float: right;" src="https://firstcontributions.github.io/assets/Readme/compare-and-pull.png" alt="create a pull request" />
-
-Now submit the pull request.
-
-<img style="float: right;" src="https://firstcontributions.github.io/assets/Readme/submit-pull-request.png" alt="submit pull request" />
-
-Soon your changes will be merged into the staging branch of this project. You will get a notification email once the changes have been merged.
-
-## Setup Instructions
-
-### 1. Clone the Repository
-
-First, clone the repository to your local machine using Git.
-
-```sh
-git clone https://github.com/your-username/[app-name].git
-cd [app-name]
-```
-
-### 2. Install Dependencies
-
-Navigate to the project directory and install the required dependencies.
-
-```sh
-yarn
-```
-
-### 3. Configure Environment Variables
-
-Create a `.env` file in the root directory of the project and add your environment-specific variables. You can use the provided `.env.example` file as a reference.
-
-```sh
-cp .env.example .env
-```
-
-Edit the `.env` file to match your environment configuration.
-
-### 4. Run the Development Server
-
-Start the development server with the following command. This will also watch for any changes in your code and automatically restart the server.
-
-```sh
-yarn start:dev
-```
-
-### 5. Run the Production Server
-
-To run the application in a production environment, use the following command:
-
-```sh
-yarn start
-```
-
-### 7. Verify the Setup
-
-Open your browser and navigate to `http://localhost:8080` to verify that the application is running correctly.
-
-## API Endpoints
-
-All API endpoints can be referenced in the [API Reference](API_REFERENCE.md) document.
-
-## Versioning
-
-This project is versioned to ensure backward compatibility and easy maintenance. The current version is [version 1].
-
-## route naming conventions
-
-all routes should have a prefix of
-
-```bash
-  api/v1
-```
+- **Authentication:** JWT-based middleware extracts user context.
+- **Role-Based Access Control (RBAC):** Admin routes are strictly protected.
