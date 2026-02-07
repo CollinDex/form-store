@@ -26,4 +26,22 @@ export class SubmissionService {
 
 		return await this.submissionRepo.save(submission);
 	}
+
+	async getSubmissions(formId: string) {
+		const submissions = await this.submissionRepo.find({
+			where: {
+				formVersion: {
+					form: { id: formId }
+				}
+			},
+			relations: ['formVersion'],
+			order: { createdAt: 'DESC' }
+		});
+
+		if (!submissions) {
+			throw new ResourceNotFound('Invalid FormID');
+		}
+
+		return submissions;
+	}
 }
