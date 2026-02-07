@@ -4,19 +4,25 @@ import app from './app';
 import config from './config';
 import log from './utils/logger';
 import AppDataSource from './data-source';
+import './queues/email.queue';
 
 dotenv.config();
 
 const port = config.port;
 
-// Initialize Postgres Data Source and Start Server
-AppDataSource.initialize()
-	.then(() => {
+const startServer = async () => {
+	try {
+		await AppDataSource.initialize();
+		log.info('📦 Database connected successfully');
+
 		app.listen(port, () => {
-			log.info(`Server is listening on port ${port}`);
+			log.info(`🚀 Server running on http://localhost:${port}`);
+			log.info(`📨 Email Worker is active and listening to Redis...`);
 		});
-	})
-	.catch((error) => {
-		log.error('Error initializing Database connection:', error);
-		process.exit(1); // Exit the process if conection fails
-	});
+	} catch (error) {
+		log.error('❌ Error starting server:', error);
+		process.exit(1);
+	}
+};
+
+startServer();

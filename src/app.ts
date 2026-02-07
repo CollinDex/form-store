@@ -3,7 +3,7 @@ import express, { Express, Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swaggerConfig';
 import { errorHandler, routeNotFound } from './middleware';
-import { authRoute } from './routes';
+import { authRoute, formRoute } from './routes';
 
 const app: Express = express();
 app.options('*', cors());
@@ -30,8 +30,9 @@ app.get('/api/v1', (req: Request, res: Response) => {
 });
 
 app.use('/api/v1', authRoute);
+app.use('/api/v1', formRoute);
 
-app.use(errorHandler);
 app.use(routeNotFound);
+app.use(errorHandler);
 
 export default app;
