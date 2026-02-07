@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, CreateDateColumn, OneToMany, Index } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, Index, JoinColumn } from 'typeorm'; // Import JoinColumn
 import { FormSchema } from '../types/form.types';
 import { Form } from './form.model';
 import { Submission } from './submission.model';
@@ -13,12 +13,13 @@ export class FormVersion extends ExtendedBaseEntity {
 	@Column('jsonb')
 	schema: FormSchema;
 
-	@ManyToOne(() => Form, (form) => form.versions)
+	@ManyToOne(() => Form, (form) => form.versions, { onDelete: 'CASCADE' })
+	@JoinColumn({ name: 'formId' })
 	form: Form;
+
+	@Column({ nullable: true })
+	formId: string;
 
 	@OneToMany(() => Submission, (submission) => submission.formVersion)
 	submissions: Submission[];
-
-	@CreateDateColumn()
-	publishedAt: Date;
 }

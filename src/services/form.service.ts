@@ -26,6 +26,8 @@ export class FormService {
 	}
 
 	async addVersion(formId: string, schema: FormSchema) {
+		const ff = await this.formRepo.findOne({ where: { id: formId } });
+
 		const addTransaction = await this.versionRepo.manager.transaction(async (transactionalEntityManager) => {
 			const form = await transactionalEntityManager.findOne(Form, {
 				where: { id: formId },
