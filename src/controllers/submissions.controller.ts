@@ -15,7 +15,10 @@ export class SubmissionController {
 		try {
 			const { versionId } = req.params;
 			const { answers } = req.body;
-			const submission = await this.submissionService.submitResponse(versionId, answers);
+
+			const userEmail = req.user.email;
+
+			const submission = await this.submissionService.submitResponse(versionId, answers, userEmail);
 			sendJsonResponse(res, 201, 'Submission received successfully', { id: submission.id });
 		} catch (error: any) {
 			if (error instanceof HttpError) {
