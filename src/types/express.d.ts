@@ -1,14 +1,14 @@
-import { UserRole } from ".";
+import { UserRole } from '.';
 
 declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        user_id: string;
-        role: UserRole;
-        email: string;
-        username: string;
-      };
-    }
-  }
+	namespace Express {
+		interface Request {
+			user?: {
+				userId: string;
+				role: UserRole;
+				email: string;
+				username: string;
+			};
+		}
+	}
 }
